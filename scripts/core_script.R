@@ -205,11 +205,12 @@ out<-data.frame(upgma=cor(bd, h1), complete=cor(bd, h2), ward=cor(bd, h3), singl
 #Taxonomic turnover
 bd<-as.dist(read.table("Processed_data/taxonomic_turn.csv"))
 wd<-hclust(bd, method="ward.D2")
-plot(wd) #plot dendrogram
+hcd <- as.dendrogram(wd)
+plot(hcd, main="Dendrogram based on\ntaxonomic turnover", type = "rectangle", ylab = "Height", leaflab = "none")
 
 #Plot silhouette to determine the "optimum" number of clusters
 plot(2:10, sapply(2:10, function(i) { 
-  mean(silhouette(cutree(wd, i), dmatrix=as.matrix(bd))[,"sil_width"]) }),
+  mean(silhouette(cutree(wd, i), dmatrix=as.matrix(bd))[,"sil_width"]) }), main="Taxonomic turnover",
   xlab="Number of clusters", ylab="Average Silhouette", type="b", pch=20)
 
 #Save group results:
@@ -222,11 +223,12 @@ groups$value<-rownames(groups) #assign rownames (site IDs)
 #Functional turnover
 bd<-as.dist(read.table("Processed_data/functional_turn.csv"))
 wd<-hclust(bd, method="ward.D2")
-plot(wd) #plot dendrogram
+hcd <- as.dendrogram(wd)
+plot(hcd, main="Dendrogram based on\nfunctional turnover", type = "rectangle", ylab = "Height", leaflab = "none")
 
 #Plot silhouette to determine the "optimum" number of clusters
 plot(2:10, sapply(2:10, function(i) { 
-  mean(silhouette(cutree(wd, i), dmatrix=as.matrix(bd))[,"sil_width"]) }),
+  mean(silhouette(cutree(wd, i), dmatrix=as.matrix(bd))[,"sil_width"]) }), main="Functional turnover",
   xlab="Number of clusters", ylab="Average Silhouette", type="b", pch=20)
 
 #Save group results:
