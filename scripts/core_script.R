@@ -4,9 +4,9 @@
 # "Environmental drivers of taxonomic and functional turnover of tree assemblages in Europe"
 # Journal: Oikos
 #
-# Author: XXXX XXXX
+# Author: Josep Padullés Cubino
 # Date: 14/06/2022
-#####
+######
 
 #load R libraries:
 library(ecodist)
@@ -203,15 +203,16 @@ out<-data.frame(upgma=cor(bd, h1), complete=cor(bd, h2), ward=cor(bd, h3), singl
 #Hierarchical Agglomerative method (Ward's):
 
 #Taxonomic turnover
-bd<-as.dist(read.table("Processed_data/taxonomic_turn.csv"))
-wd<-hclust(bd, method="ward.D2")
-hcd <- as.dendrogram(wd)
-plot(hcd, main="Dendrogram based on\ntaxonomic turnover", type = "rectangle", ylab = "Height", leaflab = "none")
+bd<-as.dist(read.table("Processed_data/taxonomic_turn.csv")) #load pairwise taxonomic turnover
+wd<-hclust(bd, method="ward.D2") #get categorization
+hcd <- as.dendrogram(wd) #transform into dendrogram object
+plot(hcd, main="Dendrogram based on\ntaxonomic turnover", type = "rectangle", ylab = "Height", leaflab = "none") #plot dendrogram
 
 #Plot silhouette to determine the "optimum" number of clusters
 plot(2:10, sapply(2:10, function(i) { 
   mean(silhouette(cutree(wd, i), dmatrix=as.matrix(bd))[,"sil_width"]) }), main="Taxonomic turnover",
   xlab="Number of clusters", ylab="Average Silhouette", type="b", pch=20)
+
 
 #Save group results:
 groups <- as.data.frame(cutree(wd, k=2)) # cut tree into optimal number of clusters (and more):
@@ -221,10 +222,10 @@ groups$tk4 <- cutree(wd, k=4) #4 groups
 groups$value<-rownames(groups) #assign rownames (site IDs)
 
 #Functional turnover
-bd<-as.dist(read.table("Processed_data/functional_turn.csv"))
-wd<-hclust(bd, method="ward.D2")
-hcd <- as.dendrogram(wd)
-plot(hcd, main="Dendrogram based on\nfunctional turnover", type = "rectangle", ylab = "Height", leaflab = "none")
+bd<-as.dist(read.table("Processed_data/functional_turn.csv")) #load pairwise functional turnover
+wd<-hclust(bd, method="ward.D2") #get categorization
+hcd <- as.dendrogram(wd) #transform into dendrogram object
+plot(hcd, main="Dendrogram based on\nfunctional turnover", type = "rectangle", ylab = "Height", leaflab = "none") #plot dendrogram
 
 #Plot silhouette to determine the "optimum" number of clusters
 plot(2:10, sapply(2:10, function(i) { 
@@ -232,9 +233,9 @@ plot(2:10, sapply(2:10, function(i) {
   xlab="Number of clusters", ylab="Average Silhouette", type="b", pch=20)
 
 #Save group results:
-groups$fk2 <- cutree(wd, k=2)
-groups$fk3 <- cutree(wd, k=3)
-groups$fk4 <- cutree(wd, k=4)
+groups$fk2 <- cutree(wd, k=2) #2 groups
+groups$fk3 <- cutree(wd, k=3) #3 groups
+groups$fk4 <- cutree(wd, k=4) #4 groups
 
 #Write.output
 #write.table(groups, "Processed_data/clusters.csv")
